@@ -7,6 +7,30 @@ class Movie(object):
         
     def close(self):
         self._driver.close()
+
+    def create_movie(self, name):
+        with self._driver.session() as session:
+            session.write_transaction(self.create_movie_node, name)
+
+    @staticmethod
+    def create_movie_node(tx, name):
+        tx.run(
+            "MERGE (:Movie {title: $title})", title=name
+        )
+
+    def get_movie(self, movie_title):
+        with self._driver.session() as session:
+            tx = session.begin_transaction()
+            result = self.retrieve_movie(tx, movie_title)
+
+        return result
+    
+    @staticmethod
+    def retrieve_movie(tx, movie_title):
+        return tx.run(
+            "MATCH (m:Movie {title: $title})"
+            "RETURN m.title", title=movie_title
+        ).single().value()
     
     def get_movies(self):
         with self._driver.session() as session:
