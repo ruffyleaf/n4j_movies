@@ -8,6 +8,16 @@ class Actor(object):
     def close(self):
         self._driver.close()
 
+    def create_actor(self, name):
+        with self._driver.session() as session:
+            session.write_transaction(self.create_actor_node, name)
+
+    @staticmethod
+    def create_actor_node(tx, name):
+        tx.run(
+            "MERGE (a:Person {name: $name})", name=name
+        )                
+
     def get_actor(self, name):
         with self._driver.session() as session:
             tx = session.begin_transaction()
