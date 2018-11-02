@@ -78,3 +78,16 @@ class Actor(object):
                 "MATCH (actors)-[:ACTED_IN]->(:Movie {title: $movie})"
                 "RETURN actors.name", 
             movie=movie).value()
+
+    def acted_in(self, actor_name, movie_title):
+        with self._driver.session() as session:
+            session.write_transaction(self.rel_acted_in, actor_name, movie_title)
+
+    @staticmethod
+    def rel_acted_in(tx, actor_name, movie_title):
+        tx.run(
+            "MATCH (a:Person {name: $name})"
+            "MATCH (m:Movie {title: $title})"
+            "MERGE (a)-[:ACTED_IN]->(m)", 
+            name=actor_name, title=movie_title
+        )
