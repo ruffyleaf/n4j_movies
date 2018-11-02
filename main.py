@@ -15,12 +15,29 @@ def main():
 
     movie = Movie(URI, USER, PASSWORD)
 
-    for m in movie.get_movies():
-        print "The Actors in %s are:" % m
-        for a in actor.get_actors_in_movie(m):
-            print a
+    # for m in movie.get_movies():
+    #     print "The Actors in %s are:" % m
+    #     for a in actor.get_actors_in_movie(m):
+    #         print a
         
-        print "-----"
+    #     print "-----"
+
+    actor.create_actor("Maximilian Jackson")
+    print actor.get_actor("Maximilian Jackson")
+
+    movie.create_movie("Max's movie")
+
+    print movie.get_movie("Max's movie")
+
+    #actor.delete_actor("Maximilian Jackson")
+    #movie.delete_movie("Max's movie")
+    actor.acted_in("Maximilian Jackson", "Max's movie")
+    
+    for a in actor.get_actors_in_movie("Max's movie"):
+        print a
+        
+    actor.close()
+    movie.close()
 
 if __name__ == '__main__':
     main()
