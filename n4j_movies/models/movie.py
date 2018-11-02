@@ -18,6 +18,17 @@ class Movie(object):
             "MERGE (:Movie {title: $title})", title=name
         )
 
+    def delete_movie(self, title):
+        with self._driver.session() as session:
+            session.write_transaction(self.delete_movie_node, title)
+
+    @staticmethod
+    def delete_movie_node(tx, title):
+        tx.run(
+            "MATCH (m:Movie {title: $title})"
+            "DELETE m", title=title
+        )
+
     def get_movie(self, movie_title):
         with self._driver.session() as session:
             tx = session.begin_transaction()
