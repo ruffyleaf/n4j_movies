@@ -18,6 +18,17 @@ class Actor(object):
             "MERGE (a:Person {name: $name})", name=name
         )                
 
+    def delete_actor(self, name):
+        with self._driver.session() as session:
+            session.write_transaction(self.delete_actor_node, name)
+
+    @staticmethod
+    def delete_actor_node(tx, name):
+        tx.run(
+            "MATCH (p:Person {name: $name})"
+            "DELETE p", name=name
+        )
+
     def get_actor(self, name):
         with self._driver.session() as session:
             tx = session.begin_transaction()
