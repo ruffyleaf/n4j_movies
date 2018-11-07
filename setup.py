@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='n4j_movies',
@@ -7,6 +7,6 @@ setup(
     url='https://github.com/ruffyleaf/n4j_movies',
     author='ruffyleaf',
     author_email='ruffyleaf@hotmail.com',
-    packages=['n4j_movies'],
+    packages=find_packages(),
     zip_safe=False
 )
